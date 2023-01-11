@@ -1,0 +1,23 @@
+server:
+  port: 5000
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+
+spring:
+  datasource:
+    url: jdbc:mariadb://${rds.hostname}:${rds.port}/${rds.db.name}
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${rds.username}
+    password: ${rds.password}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      '[hibernate.default_batch_fetch_size]': 100
+
+logging:
+  level:
+    '[shop.mtcoding.bank]': INFO
