@@ -29,3 +29,4 @@ spring:
 logging:
   level:
     '[shop.mtcoding.bank]': DEBUG
+    '[org.hibernate.type]': TRACE

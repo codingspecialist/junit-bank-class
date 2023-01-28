@@ -61,6 +61,6 @@ public class JwtAuthorizationFilterTest {
         ResultActions resultActions = mvc.perform(get("/api/admin/hello/test").header(JwtVO.HEADER, jwtToken));
 
         // then
-        resultActions.andExpect(status().isForbidden());
+        resultActions.andExpect(status().isForbidden()); // 403
     }
 }

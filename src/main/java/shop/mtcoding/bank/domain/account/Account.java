@@ -33,7 +33,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(unique = true, nullable = false, length = 4) // 수정함
     private Long number; // 계좌번호
     @Column(nullable = false, length = 4)
     private Long password; // 계좌비번
