@@ -19,7 +19,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @NoArgsConstructor // 스프링이 User 객체생성할 때 빈생성자로 new를 하기 때문!!
 @Getter
 @EntityListeners(AuditingEntityListener.class)
