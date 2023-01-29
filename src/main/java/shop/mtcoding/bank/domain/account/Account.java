@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -71,5 +72,9 @@ public class Account {
         if (user.getId() != userId) { // Lazy 로딩이어도 id를 조회할 때는 select 쿼리가 날라가지 않는다.
             throw new CustomApiException("계좌 소유자가 아닙니다");
         }
+    }
+
+    public void deposit(Long amount) {
+        balance = balance + amount;
     }
 }
