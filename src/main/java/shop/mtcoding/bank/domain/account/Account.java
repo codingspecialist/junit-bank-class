@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.mtcoding.bank.domain.user.User;
+import shop.mtcoding.bank.handler.ex.CustomApiException;
 
 @NoArgsConstructor // 스프링이 User 객체생성할 때 빈생성자로 new를 하기 때문!!
 @Getter
@@ -64,4 +65,11 @@ public class Account {
         this.updatedAt = updatedAt;
     }
 
+    public void checkOwner(Long userId) {
+        // String testUsername = user.getUsername(); // Lazy 로딩이 되어야 함.
+        // System.out.println("테스트 : " + testUsername);
+        if (user.getId() != userId) { // Lazy 로딩이어도 id를 조회할 때는 select 쿼리가 날라가지 않는다.
+            throw new CustomApiException("계좌 소유자가 아닙니다");
+        }
+    }
 }
