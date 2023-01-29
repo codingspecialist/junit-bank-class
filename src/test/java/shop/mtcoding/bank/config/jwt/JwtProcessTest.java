@@ -11,14 +11,22 @@ import shop.mtcoding.bank.domain.user.UserEnum;
 
 public class JwtProcessTest {
 
-    @Test
-    public void create_test() throws Exception {
+    private String createToken() {
         // given
         User user = User.builder().id(1L).role(UserEnum.ADMIN).build();
         LoginUser loginUser = new LoginUser(user);
 
         // when
         String jwtToken = JwtProcess.create(loginUser);
+        return jwtToken;
+    }
+
+    @Test
+    public void create_test() throws Exception {
+        // given
+
+        // when
+        String jwtToken = createToken();
         System.out.println("테스트 : " + jwtToken);
 
         // then
@@ -28,8 +36,8 @@ public class JwtProcessTest {
     @Test
     public void verify_test() throws Exception {
         // given
-        String jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiYW5rIiwicm9sZSI6IkFETUlOIiwiaWQiOjEsImV4cCI6MTY3NTQ3NDU2N30._-1W74joBbY4iiJWJ2ObWBY9_T09Ys4dlSrYOdsaR6Wj6I0odvd6UnNbZyhne_yOtvl5GdqJfmoBB-R6s8yu8g";
-
+        String token = createToken(); // Bearer 제거해서 처리하기
+        String jwtToken = token.replace(JwtVO.TOKEN_PREFIX, "");
         // when
         LoginUser loginUser = JwtProcess.verify(jwtToken);
         System.out.println("테스트 : " + loginUser.getUser().getId());
