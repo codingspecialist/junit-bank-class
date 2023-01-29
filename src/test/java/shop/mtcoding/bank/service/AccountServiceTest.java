@@ -20,7 +20,6 @@ import shop.mtcoding.bank.config.dummy.DummyObject;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.account.AccountRepository;
 import shop.mtcoding.bank.domain.transaction.Transaction;
-import shop.mtcoding.bank.domain.transaction.TransactionEnum;
 import shop.mtcoding.bank.domain.transaction.TransactionRepository;
 import shop.mtcoding.bank.domain.user.User;
 import shop.mtcoding.bank.domain.user.UserRepository;
@@ -29,6 +28,7 @@ import shop.mtcoding.bank.dto.account.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountDepositRespDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountSaveRespDto;
 import shop.mtcoding.bank.handler.ex.CustomApiException;
+import shop.mtcoding.bank.service.AccountService.AccountWithdrawReqDto;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest extends DummyObject {
@@ -57,7 +57,7 @@ public class AccountServiceTest extends DummyObject {
         accountSaveReqDto.setNumber(1111L);
         accountSaveReqDto.setPassword(1234L);
 
-        // stub 1
+        // stub 1L
         User ssar = newMockUser(userId, "ssar", "쌀");
         when(userRepository.findById(any())).thenReturn(Optional.of(ssar));
 
@@ -103,7 +103,7 @@ public class AccountServiceTest extends DummyObject {
         accountDepositReqDto.setGubun("DEPOSIT");
         accountDepositReqDto.setTel("01088887777");
 
-        // stub 1
+        // stub 1L
         User ssar = newMockUser(1L, "ssar", "쌀"); // 실행됨
         Account ssarAccount1 = newMockAccount(1L, 1111L, 1000L, ssar); // 실행됨 - ssarAccount1 -> 1000원
         when(accountRepository.findByNumber(any())).thenReturn(Optional.of(ssarAccount1)); // 실행안됨 -> service호출후 실행됨 ->
@@ -134,7 +134,7 @@ public class AccountServiceTest extends DummyObject {
         accountDepositReqDto.setGubun("DEPOSIT");
         accountDepositReqDto.setTel("01088887777");
 
-        // stub 1
+        // stub 1L
         User ssar = newMockUser(1L, "ssar", "쌀"); // 실행됨
         Account ssarAccount1 = newMockAccount(1L, 1111L, 1000L, ssar); // 실행됨 - ssarAccount1 -> 1000원
         when(accountRepository.findByNumber(any())).thenReturn(Optional.of(ssarAccount1));
@@ -178,6 +178,25 @@ public class AccountServiceTest extends DummyObject {
     }
 
     // 계좌 출금_테스트 (서비스)
+    @Test
+    public void 계좌출금_test() throws Exception {
+        // given
+        Long amount = 1000L;
+        Long password = 1234L;
+        Long userId = 1L;
+
+        User ssar = newMockUser(1L, "ssar", "쌀");
+        Account ssarAccount = newMockAccount(1L, 1111L, 1000L, ssar);
+
+        // when and then
+        if (amount <= 0L) {
+            throw new CustomApiException("0원 이하의 금액을 입금할 수 없습니다");
+        }
+        ssarAccount.checkOwner(userId);
+        ssarAccount.checkSamePassword(password);
+        // ssarAccount.checkBalance(amount);
+        ssarAccount.withdraw(amount);
+    }
 
     // 계좌 이체_테스트 (서비스)
 
