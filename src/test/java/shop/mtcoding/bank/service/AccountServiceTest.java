@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -26,9 +28,9 @@ import shop.mtcoding.bank.domain.user.UserRepository;
 import shop.mtcoding.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import shop.mtcoding.bank.dto.account.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountDepositRespDto;
+import shop.mtcoding.bank.dto.account.AccountRespDto.AccountListRespDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountSaveRespDto;
 import shop.mtcoding.bank.handler.ex.CustomApiException;
-import shop.mtcoding.bank.service.AccountService.AccountWithdrawReqDto;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest extends DummyObject {
@@ -75,6 +77,28 @@ public class AccountServiceTest extends DummyObject {
 
         // then
         assertThat(accountSaveRespDto.getNumber()).isEqualTo(1111L);
+    }
+
+    @Test
+    public void 계좌목록보기_유저별_test() throws Exception {
+        // given
+        Long userId = 1L;
+
+        // stub
+        User ssar = newMockUser(1L, "ssar", "쌀");
+        when(userRepository.findById(userId)).thenReturn(Optional.of(ssar));
+
+        Account ssarAccount1 = newMockAccount(1L, 1111L, 1000L, ssar);
+        Account ssarAccount2 = newMockAccount(2L, 2222L, 1000L, ssar);
+        List<Account> accountList = Arrays.asList(ssarAccount1, ssarAccount2);
+        when(accountRepository.findByUser_id(any())).thenReturn(accountList);
+
+        // when
+        AccountListRespDto accountListRespDto = accountService.계좌목록보기_유저별(userId);
+
+        // then
+        assertThat(accountListRespDto.getFullname()).isEqualTo("쌀");
+        assertThat(accountListRespDto.getAccounts().size()).isEqualTo(2);
     }
 
     @Test
@@ -181,14 +205,14 @@ public class AccountServiceTest extends DummyObject {
     @Test
     public void 계좌출금_test() throws Exception {
         // given
-        Long amount = 1000L;
+        Long amount = 100L;
         Long password = 1234L;
         Long userId = 1L;
 
         User ssar = newMockUser(1L, "ssar", "쌀");
         Account ssarAccount = newMockAccount(1L, 1111L, 1000L, ssar);
 
-        // when and then
+        // when
         if (amount <= 0L) {
             throw new CustomApiException("0원 이하의 금액을 입금할 수 없습니다");
         }
@@ -196,6 +220,9 @@ public class AccountServiceTest extends DummyObject {
         ssarAccount.checkSamePassword(password);
         // ssarAccount.checkBalance(amount);
         ssarAccount.withdraw(amount);
+
+        // then
+        assertThat(ssarAccount.getBalance()).isEqualTo(900L);
     }
 
     // 계좌 이체_테스트 (서비스)
