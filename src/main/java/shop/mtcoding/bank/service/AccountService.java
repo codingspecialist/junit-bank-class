@@ -3,12 +3,17 @@ package shop.mtcoding.bank.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import shop.mtcoding.bank.domain.account.Account;
 import shop.mtcoding.bank.domain.account.AccountRepository;
 import shop.mtcoding.bank.domain.transaction.Transaction;
@@ -21,6 +26,7 @@ import shop.mtcoding.bank.dto.account.AccountReqDto.AccountSaveReqDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountDepositRespDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountListRespDto;
 import shop.mtcoding.bank.dto.account.AccountRespDto.AccountSaveRespDto;
+import shop.mtcoding.bank.dto.account.AccountRespDto.AccountWithdrawRespDto;
 import shop.mtcoding.bank.handler.ex.CustomApiException;
 
 @RequiredArgsConstructor
@@ -88,14 +94,13 @@ public class AccountService {
 
         // 입금 (해당 계좌 balance 조정 - update문 - 더티체킹)
         depositAccountPS.deposit(accountDepositReqDto.getAmount());
-        System.out.println("테스트 : ssarAccount1 : 잔액이 얼마지 : " + depositAccountPS.getBalance());
 
         // 거래내역 남기기
         Transaction transaction = Transaction.builder()
-                .depositAccount(depositAccountPS)
                 .withdrawAccount(null)
-                .depositAccountBalance(depositAccountPS.getBalance())
+                .depositAccount(depositAccountPS)
                 .withdrawAccountBalance(null)
+                .depositAccountBalance(depositAccountPS.getBalance())
                 .amount(accountDepositReqDto.getAmount())
                 .gubun(TransactionEnum.DEPOSIT)
                 .sender("ATM")
@@ -105,6 +110,64 @@ public class AccountService {
 
         Transaction transactionPS = transactionRepository.save(transaction);
         return new AccountDepositRespDto(depositAccountPS, transactionPS);
+    }
+
+    @Transactional
+    public AccountWithdrawRespDto 계좌출금(AccountWithdrawReqDto accountWithdrawReqDto, Long userId) {
+        // 0원 체크
+        if (accountWithdrawReqDto.getAmount() <= 0L) {
+            throw new CustomApiException("0원 이하의 금액을 입금할 수 없습니다");
+        }
+
+        // 출금계좌 확인
+        Account withdrawAccountPS = accountRepository.findByNumber(accountWithdrawReqDto.getNumber())
+                .orElseThrow(
+                        () -> new CustomApiException("계좌를 찾을 수 없습니다"));
+
+        // 출금 소유자 확인 (로그인한 사람과 동일한지)
+        withdrawAccountPS.checkOwner(userId);
+
+        // 출금계좌 비빌번호 확인
+        withdrawAccountPS.checkSamePassword(accountWithdrawReqDto.getPassword());
+
+        // 출금계좌 잔액 확인
+        withdrawAccountPS.checkBalance(accountWithdrawReqDto.getAmount());
+
+        // 출금하기
+        withdrawAccountPS.withdraw(accountWithdrawReqDto.getAmount());
+
+        // 거래내역 남기기 (내 계좌에서 ATM으로 출금)
+        Transaction transaction = Transaction.builder()
+                .withdrawAccount(withdrawAccountPS)
+                .depositAccount(null)
+                .withdrawAccountBalance(withdrawAccountPS.getBalance())
+                .depositAccountBalance(null)
+                .amount(accountWithdrawReqDto.getAmount())
+                .gubun(TransactionEnum.WITHDRAW)
+                .sender(accountWithdrawReqDto.getNumber() + "")
+                .reciver("ATM")
+                .build();
+
+        Transaction transactionPS = transactionRepository.save(transaction);
+
+        // DTO응답
+        return new AccountWithdrawRespDto(withdrawAccountPS, transactionPS);
+    }
+
+    @Setter
+    @Getter
+    public static class AccountWithdrawReqDto {
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long number;
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long password;
+        @NotNull
+        private Long amount;
+        @NotEmpty
+        @Pattern(regexp = "WITHDRAW")
+        private String gubun;
     }
 
 }
