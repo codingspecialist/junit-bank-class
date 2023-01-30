@@ -16,7 +16,6 @@ public class LongTest {
 
         // then
         assertThat(v1).isEqualTo(v2);
-
     }
 
     @Test
