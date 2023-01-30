@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>로그인 페이지</h1>
+    <hr>
+    <form>
+        <input type="text" id="username"><br/>
+        <input type="password" id="password"><br/>
+        <button type="button" onclick="login()">로그인</button>
+    </form>
+
+    <script>
+        // async란? await지점을 기억한 채로 login 함수의 스택을 빠져나와라
+        async function login(){
+            let userDto = {
+                username:document.querySelector("#username").value,
+                password:document.querySelector("#password").value
+            }
+            console.log(userDto);
+
+            let userJson = JSON.stringify(userDto);
+            console.log(userJson);
+
+            // 통신 (시간이 걸림)
+            let r1 = await fetch("http://localhost:8081/api/login", {
+                method:"post",
+                body: userJson,
+                headers:{
+                    "Content-Type":"application/json; charset=utf-8"
+                }
+            });
+            console.log("Authorization", r1.headers.get("Authorization"));
+            let token = r1.headers.get("Authorization");
+            localStorage.setItem("token", token);
+
+            sessionStorage.setItem("token", token);
+
+            let r2 = await r1.json();
+            console.log(r2);
+        }
+        // 빠져나옴(async) -> login 함수 내부에 있는 값들을 메모리에 복사해둬야 함 (캡쳐링)
+
+    </script>
+</body>
+</html>
