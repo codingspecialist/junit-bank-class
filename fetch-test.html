@@ -38,7 +38,6 @@
             console.log("Authorization", r1.headers.get("Authorization"));
             let token = r1.headers.get("Authorization");
             localStorage.setItem("token", token);
-
             sessionStorage.setItem("token", token);
 
             let r2 = await r1.json();
