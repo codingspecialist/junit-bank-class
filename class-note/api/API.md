@@ -1,7 +1,7 @@
 # Bank API 문서
 
 ### 회원가입 : POST
-- http://localhost:8080/api/join
+- http://localhost:8081/api/join
 - body
 ```json
 {
@@ -14,7 +14,7 @@
 ![img](./join.png)
 
 ### 로그인 : POST
-- http://localhost:8080/api/login
+- http://localhost:8081/api/login
 - body
 ```json
 {
@@ -25,7 +25,7 @@
 ![img](./login.png)
 
 ### 패스워드변경 : PUT
-- http://localhost:8080/api/s/user/login-user/password
+- http://localhost:8081/api/s/user/login-user/password
 
 - header 
 ```txt
@@ -41,7 +41,7 @@ Authorization : Bearar 토큰
 ![img](./change-password.png)
 
 ### 계좌등록 : POST
-- http://localhost:8080/api/s/account
+- http://localhost:8081/api/s/account
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -56,7 +56,7 @@ Authorization : Bearar 토큰
 ![img](./save-account.png)
 
 ### 계좌목록 : GET
-- http://localhost:8080/api/s/account/login-user
+- http://localhost:8081/api/s/account/login-user
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -64,7 +64,7 @@ Authorization : Bearar 토큰
 ![img](./list-account.png)
 
 ### 계좌삭제 : DELETE
-- http://localhost:8080/api/s/account/{accountNumber}
+- http://localhost:8081/api/s/account/{accountNumber}
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -72,7 +72,7 @@ Authorization : Bearar 토큰
 ![img](./delete-account.png)
 
 ### 계좌입금 : POST
-- http://localhost:8080/api/account/deposit
+- http://localhost:8081/api/account/deposit
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -89,7 +89,7 @@ Authorization : Bearar 토큰
 ![img](./deposit-account.png)
 
 ### 계좌출금 : POST
-- http://localhost:8080/api/s/account/withdraw
+- http://localhost:8081/api/s/account/withdraw
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -106,7 +106,7 @@ Authorization : Bearar 토큰
 ![img](./withdraw-account.png)
 
 ### 계좌이체 : POST
-- http://localhost:8080/api/s/account/transfer
+- http://localhost:8081/api/s/account/transfer
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -124,7 +124,7 @@ Authorization : Bearar 토큰
 ![img](./transfer-account.png)
 
 ### 계좌상세 : GET
-- http://localhost:8080/api/s/account/{accountNumber}
+- http://localhost:8081/api/s/account/{number}?page=0
 - header 
 ```txt
 Authorization : Bearar 토큰
@@ -132,7 +132,7 @@ Authorization : Bearar 토큰
 ![img](./detail-account.png)
 
 ### 거래내역 : GET
-- http://localhost:8080/api/s/account/1111/transaction?gubun=ALL&page=0
+- http://localhost:8081/api/s/account/1111/transaction?gubun=ALL&page=0
 - header 
 ```txt
 Authorization : Bearar 토큰

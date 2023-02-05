@@ -1,6 +1,17 @@
 # Junit Bank App
 
-시큐리티+JWT 전체 그림으로 설명하고 코드 리뷰하기
+## 포스트맨 공유
+- class-note에 bank.postman_collection.json 파일
+
+## 화면설계
+[ux-design](./class-note/ux-design.pdf)
+
+## 테이블설계
+[table-design](./class-note/table-design.pdf)
+
+## 유효성검사
+> [regex](./class-note/regex/regex.pdf)
+> [validation](./class-note/regex/validation.png)
 
 ### 기능
 - 의존성 설정 (끝)
@@ -21,11 +32,9 @@
 - 게좌이체 (끝)
 - 낮은 수 Long Value 테스트 (끝)
 - cors expose 테스트 (끝)
-- 컨트롤러 값 검증 테스트 (왜냐하면 서비스 단위 테스트만 하니까)
+- 컨트롤러 값 검증 테스트 (왜냐하면 서비스 단위 테스트만 하니까) (끝)
 - 이체내역보기(동적쿼리) (Repo 끝)
-- 계좌상세보기
-
-
+- 계좌상세보기 (끝)
 
 ### Jpa LocalDateTime 자동으로 생성하는 법
 - @EnableJpaAuditing (Main 클래스)
@@ -38,6 +47,11 @@
     @LastModifiedDate // Insert, Update
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+```
+
+## 레포지토리, 컨트롤러 테스트시 주의점
+```txt
+    em.clear(); 를 통해서 영속성컨텍스트를 초기화 해줘야 한다.
 ```
 
 ## 통합테스트 기본 어노테이션 세팅
@@ -59,6 +73,73 @@
 ```java
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
+```
+
+```sql
+create database metadb;
+use metadb;
+
+create table user_tb (
+    id bigint auto_increment,
+    username varchar(255) not null unique,
+    password varchar(255) not null,
+    fullname varchar(255) not null,
+    email varchar(255) not null,
+    role varchar(255) not null,
+    created_at timestamp not null,
+    updated_at timestamp not null,
+    primary key (id)
+);
+create table account_tb (
+    id bigint auto_increment,
+    number bigint not null unique,
+    balance bigint not null,
+    password varchar(255) not null,
+    user_id bigint,
+    created_at timestamp not null,
+    updated_at timestamp not null,
+    primary key (id)
+);
+create index idx_account_number on account_tb (number);
+
+create table transaction_tb (
+    id bigint auto_increment,
+    amount bigint not null,
+    gubun varchar(255) not null, -- WITHDRAW, DEPOSIT, TRANSFER
+    withdraw_account_balance bigint,
+    deposit_account_balance bigint,
+    deposit_account_id bigint,
+    withdraw_account_id bigint,
+    created_at timestamp not null,
+    updated_at timestamp not null,
+    primary key (id)
+);
+```
+
+## 개발 더미 데이터 (통합 or 레포)
+```java
+ private void dataSetting() {
+                User ssar = userRepository.save(newUser("ssar", "쌀"));
+                User cos = userRepository.save(newUser("cos", "코스,"));
+                User love = userRepository.save(newUser("love", "러브"));
+                User admin = userRepository.save(newUser("admin", "관리자"));
+
+                Account ssarAccount1 = accountRepository.save(newAccount(1111L, ssar));
+                Account cosAccount = accountRepository.save(newAccount(2222L, cos));
+                Account loveAccount = accountRepository.save(newAccount(3333L, love));
+                Account ssarAccount2 = accountRepository.save(newAccount(4444L, ssar));
+
+                Transaction withdrawTransaction1 = transactionRepository
+                                .save(newWithdrawTransaction(ssarAccount1, accountRepository));
+                Transaction depositTransaction1 = transactionRepository
+                                .save(newDepositTransaction(cosAccount, accountRepository));
+                Transaction transferTransaction1 = transactionRepository
+                                .save(newTransferTransaction(ssarAccount1, cosAccount, accountRepository));
+                Transaction transferTransaction2 = transactionRepository
+                                .save(newTransferTransaction(ssarAccount1, loveAccount, accountRepository));
+                Transaction transferTransaction3 = transactionRepository
+                                .save(newTransferTransaction(cosAccount, ssarAccount1, accountRepository));
+        }
 ```
 
 ## Junit 테스트시에 주의할 점
