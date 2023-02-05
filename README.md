@@ -1,5 +1,12 @@
 # Junit Bank App
 
+## 수업전 준비한 공부 코드
+- https://github.com/codingspecialist/JUNIT5-Security-Lecture
+## 수업을 위해서 만들어진 코드
+- https://github.com/codingspecialist/junit-bank-security-jwt
+## 수업진행하면서 만들어진 코드
+- https://github.com/codingspecialist/junit-bank-class
+
 ## 포스트맨 공유
 - class-note에 bank.postman_collection.json 파일
 
