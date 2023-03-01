@@ -29,7 +29,7 @@ public class DummyObject {
                 .amount(100L)
                 .gubun(TransactionEnum.WITHDRAW)
                 .sender(account.getNumber() + "")
-                .reciver("ATM")
+                .receiver("ATM")
                 .build();
         return transaction;
     }
@@ -48,7 +48,7 @@ public class DummyObject {
                 .amount(100L)
                 .gubun(TransactionEnum.DEPOSIT)
                 .sender("ATM")
-                .reciver(account.getNumber() + "")
+                .receiver(account.getNumber() + "")
                 .tel("01022227777")
                 .build();
         return transaction;
@@ -71,7 +71,7 @@ public class DummyObject {
                 .amount(100L)
                 .gubun(TransactionEnum.TRANSFER)
                 .sender(withdrawAccount.getNumber() + "")
-                .reciver(depositAccount.getNumber() + "")
+                .receiver(depositAccount.getNumber() + "")
                 .build();
         return transaction;
     }
@@ -89,7 +89,7 @@ public class DummyObject {
                 .amount(100L)
                 .gubun(TransactionEnum.DEPOSIT)
                 .sender("ATM")
-                .reciver(account.getNumber() + "")
+                .receiver(account.getNumber() + "")
                 .tel("01088887777")
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

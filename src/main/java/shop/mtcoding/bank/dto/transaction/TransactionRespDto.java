@@ -40,7 +40,7 @@ public class TransactionRespDto {
                 this.gubun = transaction.getGubun().getValue();
                 this.amount = transaction.getAmount();
                 this.sender = transaction.getSender();
-                this.reciver = transaction.getReciver();
+                this.reciver = transaction.getReceiver();
                 this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreatedAt());
                 this.tel = transaction.getTel() == null ? "없음" : transaction.getTel();
 

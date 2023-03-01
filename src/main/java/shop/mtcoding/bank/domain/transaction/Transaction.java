@@ -36,13 +36,11 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @ManyToOne(fetch = FetchType.LAZY)
-    private Account withdrawAccount; // null 허용됨
+    private Account withdrawAccount;
 
-    @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     @ManyToOne(fetch = FetchType.LAZY)
-    private Account depositAccount; // null 허용됨
+    private Account depositAccount;
 
     @Column(nullable = false)
     private Long amount;
@@ -55,8 +53,8 @@ public class Transaction {
     private TransactionEnum gubun; // WITHDRAW, DEPOSIT, TRANSFER, ALL
 
     // 계좌가 사라져도 로그는 남아야 한다.
-    private String sender; // 1111계좌 or ATM
-    private String reciver; // 2222계좌 or ATM
+    private String sender;
+    private String receiver;
     private String tel; // ATM -> 1111 입금 (ATM기로 무통장 입금 - 전화번호는 좀 남겨나야 함)
 
     @CreatedDate // Insert
@@ -70,7 +68,7 @@ public class Transaction {
     @Builder
     public Transaction(Long id, Account withdrawAccount, Account depositAccount, Long amount,
             Long withdrawAccountBalance, Long depositAccountBalance, TransactionEnum gubun, String sender,
-            String reciver, String tel, LocalDateTime createdAt, LocalDateTime updatedAt) {
+            String receiver, String tel, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.withdrawAccount = withdrawAccount;
         this.depositAccount = depositAccount;
@@ -79,16 +77,10 @@ public class Transaction {
         this.depositAccountBalance = depositAccountBalance;
         this.gubun = gubun;
         this.sender = sender;
-        this.reciver = reciver;
+        this.receiver = receiver;
         this.tel = tel;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
 }
-
-/**
- * withdrawAccount = null, depositAccount = 2222계좌 (ATM->2222) (입금내역)
- * withdrawAccount = 1111계좌, depositAccount = 2222계좌 (1111->2222) (이체내역)
- * withdrawAccount = 1111계좌, depositAccount = null (1111->ATM) (출금내역)
- */

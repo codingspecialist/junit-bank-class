@@ -101,7 +101,7 @@ public class AccountService {
                 .amount(accountDepositReqDto.getAmount())
                 .gubun(TransactionEnum.DEPOSIT)
                 .sender("ATM")
-                .reciver(accountDepositReqDto.getNumber() + "")
+                .receiver(accountDepositReqDto.getNumber() + "")
                 .tel(accountDepositReqDto.getTel())
                 .build();
 
@@ -142,7 +142,7 @@ public class AccountService {
                 .amount(accountWithdrawReqDto.getAmount())
                 .gubun(TransactionEnum.WITHDRAW)
                 .sender(accountWithdrawReqDto.getNumber() + "")
-                .reciver("ATM")
+                .receiver("ATM")
                 .build();
 
         Transaction transactionPS = transactionRepository.save(transaction);
@@ -197,7 +197,7 @@ public class AccountService {
                 .amount(accountTransferReqDto.getAmount())
                 .gubun(TransactionEnum.TRANSFER)
                 .sender(accountTransferReqDto.getWithdrawNumber() + "")
-                .reciver(accountTransferReqDto.getDepositNumber() + "")
+                .receiver(accountTransferReqDto.getDepositNumber() + "")
                 .build();
 
         Transaction transactionPS = transactionRepository.save(transaction);

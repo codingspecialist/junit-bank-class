@@ -46,7 +46,7 @@ public class AccountRespDto {
                 this.id = transaction.getId();
                 this.gubun = transaction.getGubun().getValue();
                 this.sender = transaction.getSender();
-                this.reciver = transaction.getReciver();
+                this.reciver = transaction.getReceiver();
                 this.amount = transaction.getAmount();
                 this.depositAccountBalance = transaction.getDepositAccountBalance();
                 this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreatedAt());
@@ -85,7 +85,7 @@ public class AccountRespDto {
                 this.id = transaction.getId();
                 this.gubun = transaction.getGubun().getValue();
                 this.sender = transaction.getSender();
-                this.reciver = transaction.getReciver();
+                this.reciver = transaction.getReceiver();
                 this.amount = transaction.getAmount();
                 this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreatedAt());
             }
@@ -122,7 +122,7 @@ public class AccountRespDto {
                 this.id = transaction.getId();
                 this.gubun = transaction.getGubun().getValue();
                 this.sender = transaction.getSender();
-                this.reciver = transaction.getReciver();
+                this.reciver = transaction.getReceiver();
                 this.amount = transaction.getAmount();
                 this.depositAccountBalance = transaction.getDepositAccountBalance();
                 this.tel = transaction.getTel();
@@ -209,7 +209,7 @@ public class AccountRespDto {
                 this.gubun = transaction.getGubun().getValue();
                 this.amount = transaction.getAmount();
                 this.sender = transaction.getSender();
-                this.reciver = transaction.getReciver();
+                this.reciver = transaction.getReceiver();
                 this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreatedAt());
                 this.tel = transaction.getTel() == null ? "없음" : transaction.getTel();
 

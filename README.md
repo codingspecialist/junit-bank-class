@@ -82,47 +82,6 @@
 @ExtendWith(MockitoExtension.class)
 ```
 
-```sql
-create database metadb;
-use metadb;
-
-create table user_tb (
-    id bigint auto_increment,
-    username varchar(255) not null unique,
-    password varchar(255) not null,
-    fullname varchar(255) not null,
-    email varchar(255) not null,
-    role varchar(255) not null,
-    created_at timestamp not null,
-    updated_at timestamp not null,
-    primary key (id)
-);
-create table account_tb (
-    id bigint auto_increment,
-    number bigint not null unique,
-    balance bigint not null,
-    password varchar(255) not null,
-    user_id bigint,
-    created_at timestamp not null,
-    updated_at timestamp not null,
-    primary key (id)
-);
-create index idx_account_number on account_tb (number);
-
-create table transaction_tb (
-    id bigint auto_increment,
-    amount bigint not null,
-    gubun varchar(255) not null, -- WITHDRAW, DEPOSIT, TRANSFER
-    withdraw_account_balance bigint,
-    deposit_account_balance bigint,
-    deposit_account_id bigint,
-    withdraw_account_id bigint,
-    created_at timestamp not null,
-    updated_at timestamp not null,
-    primary key (id)
-);
-```
-
 ## 개발 더미 데이터 (통합 or 레포)
 ```java
  private void dataSetting() {

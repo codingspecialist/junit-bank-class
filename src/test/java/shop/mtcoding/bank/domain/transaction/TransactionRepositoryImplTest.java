@@ -53,7 +53,7 @@ public class TransactionRepositoryImplTest extends DummyObject {
                         System.out.println("테스트 : id : " + t.getId());
                         System.out.println("테스트 : amount : " + t.getAmount());
                         System.out.println("테스트 : sender : " + t.getSender());
-                        System.out.println("테스트 : reciver : " + t.getReciver());
+                        System.out.println("테스트 : reciver : " + t.getReceiver());
                         System.out.println("테스트 : withdrawAccount잔액 : " + t.getWithdrawAccountBalance());
                         System.out.println("테스트 : depositAccount잔액 : " + t.getDepositAccountBalance());
                         System.out.println("테스트 : 잔액 : " + t.getWithdrawAccount().getBalance());
@@ -73,7 +73,7 @@ public class TransactionRepositoryImplTest extends DummyObject {
                 transactionList.forEach((transaction) -> {
                         System.out.println("테스트 : " + transaction.getId());
                         System.out.println("테스트 : " + transaction.getSender());
-                        System.out.println("테스트 : " + transaction.getReciver());
+                        System.out.println("테스트 : " + transaction.getReceiver());
                         System.out.println("테스트 : " + transaction.getGubun());
                         System.out.println("테스트 : ========================");
                 });
@@ -85,7 +85,7 @@ public class TransactionRepositoryImplTest extends DummyObject {
                 transactionList.forEach((transaction) -> {
                         System.out.println("테스트 : " + transaction.getId());
                         System.out.println("테스트 : " + transaction.getSender());
-                        System.out.println("테스트 : " + transaction.getReciver());
+                        System.out.println("테스트 : " + transaction.getReceiver());
                         System.out.println("테스트 : " + transaction.getGubun());
                         System.out.println("테스트 : ========================");
                 });

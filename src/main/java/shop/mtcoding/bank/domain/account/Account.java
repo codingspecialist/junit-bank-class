@@ -9,10 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,9 +24,6 @@ import shop.mtcoding.bank.handler.ex.CustomApiException;
 @NoArgsConstructor // 스프링이 User 객체생성할 때 빈생성자로 new를 하기 때문!!
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "account_tb", indexes = {
-        @Index(name = "idx_account_number", columnList = "number")
-})
 @Entity
 public class Account {
     @Id
