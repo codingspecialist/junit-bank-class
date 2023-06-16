@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.debug("디버그 : filterChain 빈 등록됨");
-        http.headers().frameOptions().disable(); // iframe 허용안함.
+        http.headers().frameOptions().sameOrigin(); // iframe 허용안함.
         http.csrf().disable(); // enable이면 post맨 작동안함 (메타코딩 유튜브에 시큐리티 강의)
         http.cors().configurationSource(configurationSource());
 
