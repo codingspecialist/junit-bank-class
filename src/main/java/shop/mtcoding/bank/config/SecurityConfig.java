@@ -39,41 +39,43 @@ public class SecurityConfig {
             builder.addFilter(new JwtAuthorizationFilter(authenticationManager));
             super.configure(builder);
         }
+
+        public HttpSecurity build(){
+            return getBuilder();
+        }
     }
 
     // JWT 서버를 만들 예정!! Session 사용안함.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.debug("디버그 : filterChain 빈 등록됨");
-        http.headers().frameOptions().sameOrigin(); // iframe 허용안함.
-        http.csrf().disable(); // enable이면 post맨 작동안함 (메타코딩 유튜브에 시큐리티 강의)
-        http.cors().configurationSource(configurationSource());
 
-        // jSessionId를 서버쪽에서 관리안하겠다는 뜻!!
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        // react, 앱으로 요청할 예정
-        http.formLogin().disable();
-        // httpBasic은 브라우저가 팝업창을 이용해서 사용자 인증을 진행한다.
-        http.httpBasic().disable();
+        http.headers(h -> h.frameOptions(f -> f.sameOrigin()));
+        http.csrf(cf->cf.disable());
+        http.cors(co->co.configurationSource(configurationSource()));
 
-        // 필터 적용
-        http.apply(new CustomSecurityFilterManager());
+        http.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http.formLogin(f->f.disable());
+
+        http.httpBasic(hb->hb.disable());
+
+        http.with(new CustomSecurityFilterManager(), c-> c.build());
 
         // 인증 실패
-        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+        http.exceptionHandling(e-> e.authenticationEntryPoint((request, response, authException) -> {
             CustomResponseUtil.fail(response, "로그인을 진행해 주세요", HttpStatus.UNAUTHORIZED);
-        });
+        }));
 
-        // 권한 실패
-        http.exceptionHandling().accessDeniedHandler((request, response, e) -> {
+        http.exceptionHandling(e-> e.accessDeniedHandler((request, response, accessDeniedException) -> {
             CustomResponseUtil.fail(response, "권한이 없습니다", HttpStatus.FORBIDDEN);
-        });
+        }));
 
-        // https://docs.spring.io/spring-security/reference/servlet/authorization/authorize-http-requests.html
-        http.authorizeRequests()
-                .antMatchers("/api/s/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN) // 최근 공식문서에서는 ROLE_ 안붙여도 됨
-                .anyRequest().permitAll();
+        http.authorizeHttpRequests(c->
+                c.requestMatchers("/api/s/**").authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("" + UserEnum.ADMIN)
+                        .anyRequest().permitAll()
+        );
 
         return http.build();
     }

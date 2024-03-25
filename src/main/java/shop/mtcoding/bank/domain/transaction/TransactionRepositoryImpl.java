@@ -1,14 +1,11 @@
 package shop.mtcoding.bank.domain.transaction;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import javax.persistence.TypedQuery;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 interface Dao {
     List<Transaction> findTransactionList(@Param("accountId") Long accountId, @Param("gubun") String gubun,

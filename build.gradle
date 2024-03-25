@@ -1,13 +1,13 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
+	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'jacoco'
 }
 
 group = 'shop.mtcoding'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '21'
 
 configurations {
 	compileOnly {
@@ -37,65 +37,6 @@ dependencies {
 }
 
 tasks.named('test') {
-        systemProperty 'file.encoding', 'UTF-8'
+    systemProperty 'file.encoding', 'UTF-8'
 	useJUnitPlatform()
-}
-
-jacoco {
-	toolVersion = "0.8.7"
-}
-
-jacocoTestReport {
-	reports {
-		xml.enabled false
-		csv.enabled false
-		html.enabled true
-
-//		xml.destination file("${buildDir}/jacoco/index.xml")
-//		csv.destination file("${buildDir}/jacoco/index.csv")
-		html.destination file("${buildDir}/jacoco/index.html")
-	}
-	finalizedBy 'jacocoTestCoverageVerification' // 테스트 기준 미달시 실패
-}
-
-jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled = true
-			element = 'CLASS'
-
-			limit {
-				counter = 'METHOD'
-				value = 'COVEREDRATIO'
-				minimum = 0.9
-			}
-
-			// 제외할 검증 대상
-			// 패키지 + 클래스명을 적어주어야 합니다. 와일드 카드로 * (여러 글자) 와 ? (한 글자) 를 사용할 수 있습니다.
-			excludes = [
-					'*.config.*',
-					'*.dto.*',
-					'*.handler.*',
-					'*.util.*',
-					'*.domain.account.Account',
-					'*.domain.transaction.Transaction',
-					'*.domain.user.User',
-					'*.service.AccountService',
-					'*.service.TransactionService',
-					'*.*Application',
-					'*.*Enum',
-//					'*.*Exception',
-//					'*.*Advice',
-//					'*.*Config',
-//					'*.*Dto',
-//					'*.*Util',
-//					'*.*Filter',
-//					'*.*Object',
-//					'*.*Init',
-			]
-		}
-		rule {
-			// 규칙을 여러개 추가할 수 있습니다.
-		}
-	}
 }

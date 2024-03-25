@@ -1,13 +1,10 @@
 package shop.mtcoding.bank.util;
 
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import shop.mtcoding.bank.dto.ResponseDto;
 
 public class CustomResponseUtil {
